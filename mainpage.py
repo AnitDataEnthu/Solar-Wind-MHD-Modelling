@@ -52,7 +52,7 @@ if(st.sidebar.button("Run Selected Model")):
 
     fig=go.Figure()
     fig.add_trace(go.Scatter(x=chart_data.index,y=chart_data['SSIM'],fill='tozerox',text="Solar Radii , SSIM",
-                             hoverinfo='text+x+y'))  # fill down to xaxis
+                             hoverinfo='x+y'))  # fill down to xaxis
     fig.update_xaxes(title_text='Increasing Solar Radii',showgrid=False)
     fig.update_yaxes(title_text='SSIM Score',showgrid=False)
     fig.update_layout(title="Baseline Structured Similarity Index Measure(SSIM)",template="plotly_dark")
