@@ -119,3 +119,10 @@ We noticed that there is a bug in the current code about "global_memory" which m
 * opencv : pip install opencv-python
 * Activate psi - conda activate /Users/agupta/Documents/anaconda3/envs/psi
 * Install tensorflow : pip install tensorflow==1.15.0
+ pip install tensorflow==1.15.0
+ pip install streamlit
+ 
+ 
+ 
+ 
+ 

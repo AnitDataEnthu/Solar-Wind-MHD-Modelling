@@ -69,6 +69,7 @@ def scale(data):
 def getIntrestingFrames(data,frame_start,frame_end):
     print('todelete shape of data: ', data.shape)
     short_data = np.zeros((data.shape[0],10,128,110,1))           #tf.v1
+
     for file in range(data.shape[0]):
         short_data[file,0:5]=data[file,frame_start:frame_start+5,:,:,:]   #tf.v1
         short_data[file,5:10]=data[file,frame_start+5:frame_end+1,:,:,:]     #tf.v1

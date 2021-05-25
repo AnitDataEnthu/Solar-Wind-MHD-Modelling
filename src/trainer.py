@@ -11,7 +11,8 @@ import os.path
 import cv2
 import pandas as pd
 import numpy as np
-from skimage.measure import compare_ssim
+from skimage.metrics import structural_similarity as compare_ssim
+#from skimage.measure import compare_ssim
 import tensorflow as tf
 import combine
 from src.utils import preprocess

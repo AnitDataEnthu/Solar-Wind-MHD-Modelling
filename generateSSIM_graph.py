@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from skimage.measure import compare_ssim
+from skimage.metrics import structural_similarity as compare_ssim
 import pandas as pd
 from pyhdf.SD  import *
 print(os.getcwd())
@@ -49,4 +49,4 @@ def generatecsv(sample_num):
     data=scale(readfile_br(path,start,end))
     pd.DataFrame(draw_ssim_graph(data),columns=['SSIM'] ).to_csv("ssim_graph.csv",index=False)
 
-generatecsv(1)
+#generatecsv(1)

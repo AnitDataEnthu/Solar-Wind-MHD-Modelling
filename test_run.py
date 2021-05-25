@@ -33,78 +33,72 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # -----------------------------------------------------------------------------
-FLAGS = tf.app.flags
-
-
-FLAGS.DEFINE_string('train_data_paths', 'data/PSI/model-1/PSI-train.npz', 'train data paths.')
-FLAGS.DEFINE_string('valid_data_paths', 'data/PSI/model-1/PSI-valid.npz', 'validation data paths.')
-FLAGS.DEFINE_string('save_dir', 'checkpoints/model-1/ckpt-e3d_imme/', 'dir to store trained net.')           ##test
-FLAGS.DEFINE_string('gen_frm_dir', 'results/_mnist_e3d_lstm', 'dir to store result.')
-FLAGS.DEFINE_string('pretrained_model', 'model.ckpt-80000', '.ckpt file to initialize from.')     ##test
-FLAGS.DEFINE_integer('testSample',1, 'test Sample')
-FLAGS.DEFINE_integer('frame_start', 0, 'starting index of the file from 0-141')
-FLAGS.DEFINE_integer('frame_end', 9, 'ending index of the file from 0-141')
-tf.app.flags.DEFINE_boolean('is_PSI_testing', True, 'training or testing')                      ##test
-tf.app.flags.DEFINE_boolean('integrate_Yang_Model', False , 'get sample from Yang Model')         ##test
-FLAGS.DEFINE_integer('model_no',1, 'Model_number')
-FLAGS.DEFINE_string('recombination', 'Advanced Polar technique', 'Recombination technique to use')
-tf.app.flags.DEFINE_boolean('is_training', False, 'training or testing')
-FLAGS.DEFINE_string('dataset_name', 'mnist', 'The name of dataset.')
-FLAGS.DEFINE_integer('input_length', 5, 'input length.')
-FLAGS.DEFINE_integer('total_length', 10, 'total input and output length.')
-FLAGS.DEFINE_integer('img_width', 64, 'input image width.')                                      ##test
-FLAGS.DEFINE_integer('PSI_patch_size', 64, 'for recomibing the images')                          ##test
-
-FLAGS.DEFINE_integer('img_channel', 1, 'number of image channel.')
-FLAGS.DEFINE_integer('patch_size', 4, 'patch size on one dimension.')
-FLAGS.DEFINE_boolean('reverse_input', False,
-                     'reverse the input/outputs during training.')
-FLAGS.DEFINE_string('model_name', 'e3d_lstm', 'The name of the architecture.')
-
-FLAGS.DEFINE_string('num_hidden', '64,64,64,64',
-                    'COMMA separated number of units of e3d lstms.')
-FLAGS.DEFINE_integer('filter_size', 5, 'filter of a e3d lstm layer.')
-FLAGS.DEFINE_boolean('layer_norm', True, 'whether to apply tensor layer norm.')
-FLAGS.DEFINE_boolean('scheduled_sampling', True, 'for scheduled sampling')
-FLAGS.DEFINE_integer('sampling_stop_iter', 50000, 'for scheduled sampling.')
-FLAGS.DEFINE_float('sampling_start_value', 1.0, 'for scheduled sampling.')
-FLAGS.DEFINE_float('sampling_changing_rate', 0.00002, 'for scheduled sampling.')
-
-FLAGS.DEFINE_float('lr', 0.001, 'learning rate.')
-FLAGS.DEFINE_integer('batch_size', 4, 'batch size for training.')                                  ##test
-FLAGS.DEFINE_integer('max_iterations', 80000, 'max num of steps.')
-FLAGS.DEFINE_integer('display_interval', 1,
-                     'number of iters showing training loss.')
-FLAGS.DEFINE_integer('test_interval', 1000, 'number of iters for test.')
-FLAGS.DEFINE_integer('snapshot_interval', 1000,
-                     'number of iters saving models.')
-FLAGS.DEFINE_integer('num_save_samples', 10, 'number of sequences to be saved.')
-FLAGS.DEFINE_integer('n_gpu', 2,
-                     'how many GPUs to distribute the training across.')
-FLAGS.DEFINE_boolean('allow_gpu_growth', True, 'allow gpu growth')
 
 FLAGS = tf.app.flags.FLAGS
 def main(_,model_number=1,testSample=1,recursive=False,recombination="Max Pooling"):
-  """Main function."""
+    del_all_flags(tf.flags.FLAGS)
+    FLAGS=tf.app.flags
+
+    FLAGS.DEFINE_string('train_data_paths','data/PSI/model-1/PSI-train.npz','train data paths.')
+    FLAGS.DEFINE_string('valid_data_paths','data/PSI/model-1/PSI-valid.npz','validation data paths.')
+    FLAGS.DEFINE_string('save_dir','checkpoints/model-1/ckpt-e3d_imme/','dir to store trained net.')  ##test
+    FLAGS.DEFINE_string('gen_frm_dir','results/_mnist_e3d_lstm','dir to store result.')
+    FLAGS.DEFINE_string('pretrained_model','model.ckpt-80000','.ckpt file to initialize from.')  ##test
+    FLAGS.DEFINE_integer('testSample',1,'test Sample')
+    FLAGS.DEFINE_integer('frame_start',0,'starting index of the file from 0-141')
+    FLAGS.DEFINE_integer('frame_end',9,'ending index of the file from 0-141')
+    tf.app.flags.DEFINE_boolean('is_PSI_testing',True,'training or testing')  ##test
+    tf.app.flags.DEFINE_boolean('integrate_Yang_Model',False,'get sample from Yang Model')  ##test
+    FLAGS.DEFINE_integer('model_no',1,'Model_number')
+    FLAGS.DEFINE_string('recombination','Advanced Polar technique','Recombination technique to use')
+    tf.app.flags.DEFINE_boolean('is_training',False,'training or testing')
+    FLAGS.DEFINE_string('dataset_name','mnist','The name of dataset.')
+    FLAGS.DEFINE_integer('input_length',5,'input length.')
+    FLAGS.DEFINE_integer('total_length',10,'total input and output length.')
+    FLAGS.DEFINE_integer('img_width',64,'input image width.')  ##test
+    FLAGS.DEFINE_integer('PSI_patch_size',64,'for recomibing the images')  ##test
+
+    FLAGS.DEFINE_integer('img_channel',1,'number of image channel.')
+    FLAGS.DEFINE_integer('patch_size',4,'patch size on one dimension.')
+    FLAGS.DEFINE_boolean('reverse_input',False,'reverse the input/outputs during training.')
+    FLAGS.DEFINE_string('model_name','e3d_lstm','The name of the architecture.')
+
+    FLAGS.DEFINE_string('num_hidden','64,64,64,64','COMMA separated number of units of e3d lstms.')
+    FLAGS.DEFINE_integer('filter_size',5,'filter of a e3d lstm layer.')
+    FLAGS.DEFINE_boolean('layer_norm',True,'whether to apply tensor layer norm.')
+    FLAGS.DEFINE_boolean('scheduled_sampling',True,'for scheduled sampling')
+    FLAGS.DEFINE_integer('sampling_stop_iter',50000,'for scheduled sampling.')
+    FLAGS.DEFINE_float('sampling_start_value',1.0,'for scheduled sampling.')
+    FLAGS.DEFINE_float('sampling_changing_rate',0.00002,'for scheduled sampling.')
+
+    FLAGS.DEFINE_float('lr',0.001,'learning rate.')
+    FLAGS.DEFINE_integer('batch_size',4,'batch size for training.')  ##test
+    FLAGS.DEFINE_integer('max_iterations',80000,'max num of steps.')
+    FLAGS.DEFINE_integer('display_interval',1,'number of iters showing training loss.')
+    FLAGS.DEFINE_integer('test_interval',1000,'number of iters for test.')
+    FLAGS.DEFINE_integer('snapshot_interval',1000,'number of iters saving models.')
+    FLAGS.DEFINE_integer('num_save_samples',10,'number of sequences to be saved.')
+    FLAGS.DEFINE_integer('n_gpu',2,'how many GPUs to distribute the training across.')
+    FLAGS.DEFINE_boolean('allow_gpu_growth',True,'allow gpu growth')
+
+    FLAGS=tf.app.flags.FLAGS
 
 
-  if tf.gfile.Exists(FLAGS.save_dir) and (FLAGS.is_training) :
-    tf.gfile.DeleteRecursively(FLAGS.save_dir)
-  tf.gfile.MakeDirs(FLAGS.save_dir)
-  if tf.gfile.Exists(FLAGS.gen_frm_dir):
-    tf.gfile.DeleteRecursively(FLAGS.gen_frm_dir)
-  tf.gfile.MakeDirs(FLAGS.gen_frm_dir)
-
-  gpu_list = np.asarray(
+    if tf.gfile.Exists(FLAGS.save_dir) and (FLAGS.is_training):
+        tf.gfile.DeleteRecursively(FLAGS.save_dir)
+    tf.gfile.MakeDirs(FLAGS.save_dir)
+    if tf.gfile.Exists(FLAGS.gen_frm_dir):
+        tf.gfile.DeleteRecursively(FLAGS.gen_frm_dir)
+    tf.gfile.MakeDirs(FLAGS.gen_frm_dir)
+    gpu_list = np.asarray(
       os.environ.get('CUDA_VISIBLE_DEVICES', '-1').split(','), dtype=np.int32)
-  FLAGS.n_gpu = len(gpu_list)
-  print('Initializing models')
+    FLAGS.n_gpu = len(gpu_list)
+    print('Initializing models')
+    model = Model(FLAGS)
 
-  model = Model(FLAGS)
-
-  if FLAGS.is_training:
-      train_wrapper(model)
-  elif FLAGS.is_PSI_testing:
+    if FLAGS.is_training:
+        train_wrapper(model)
+    elif FLAGS.is_PSI_testing:
       generatecsv(testSample)
       if(FLAGS.integrate_Yang_Model):
         createTestDataFromYangModel(FLAGS.PSI_patch_size,testSample)
@@ -112,10 +106,13 @@ def main(_,model_number=1,testSample=1,recursive=False,recombination="Max Poolin
         if recursive==True:
             callconfig(model_number,testSample,recombination)
             PSI_test_wrapper(model)
+            del_all_flags(tf.flags.FLAGS)
+
         elif recursive==False:
             callconfig(model_number,testSample,recombination)
             create_test_data(FLAGS.frame_start,FLAGS.frame_end,FLAGS.valid_data_paths,FLAGS.testSample)
             PSI_test_wrapper(model)
+            del_all_flags(tf.flags.FLAGS)
         return True
   # else :
   #     test_wrapper(model)
@@ -254,10 +251,15 @@ def callconfig(model_number,testSample,recombination):
     print(FLAGS.gen_frm_dir)
     print(FLAGS.model_no)
 
-
+def del_all_flags(FLAGS):
+    flags_dict = FLAGS._flags()
+    keys_list = [keys for keys in flags_dict]
+    for keys in keys_list:
+        FLAGS.__delattr__(keys)
 
 #21 and 28
 if __name__ == '__main__':
   start_time=time.time()
   tf.app.run()
   print("--- %s seconds ---" % (time.time() - start_time))
+
